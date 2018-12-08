@@ -1,18 +1,44 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>Sprint {{sprintDays}} days</h1>
+    <div class="meeting-list">
+      <router-link
+        tag="div"
+        class="meeting"
+        :to="`/meeting/${index}`"
+        :key="meeting.name"
+        v-for="(meeting, index) in meetings"
+      >
+        {{meeting.name}}
+        <p>{{duration(meeting.baseDuration)}}</p>
+      </router-link>
+    </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+import { mapGetters } from 'vuex';
 
 export default {
-  name: "home",
-  components: {
-    HelloWorld
+  inject: ['duration'],
+  name: 'home',
+  computed: {
+    ...mapGetters(['meetings', 'sprintDays'])
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.meeting-list {
+  border-top: 1px solid #ddd;
+  .meeting {
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+    p {
+      margin: 0;
+      font-size: 12px;
+      color: #999;
+    }
+  }
+}
+</style>
