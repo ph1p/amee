@@ -37,6 +37,7 @@ export default {
         }, 1000);
       }
     });
+
     this.meetings.forEach(({ timer, id }) => {
       if (timer > 0 && !this.intervalCache[id]) {
         this.intervalCache[id] = setInterval(() => {
@@ -62,5 +63,12 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+}
+button {
+  padding: 10px 15px;
+  border-radius: 4px;
+  background-color: rgb(0, 148, 185);
+  border: 0;
+  color: #fff;
 }
 </style>

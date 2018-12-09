@@ -74,34 +74,34 @@ const state = {
 
 const getters = {
   meetings: state => state.meetings,
-  meeting: state => index => state.meetings[index]
+  meeting: (state, getters) => id =>
+    getters.meetings.find(m => m.id === parseInt(id))
 };
 
 const mutations = {
-  startTimer(state, id) {
-    const meeting = state.meetings.find(m => m.id === id);
-
+  startTimer(state, meeting) {
     meeting.timer = meeting.baseDuration;
-    // meeting.timer = 10;
   },
-  stopTimer(state, id) {
-    state.meetings.find(m => m.id === id).timer = null;
+  stopTimer(state, meeting) {
+    meeting.timer = null;
   },
-  decrementTimer(state, id) {
-    state.meetings.find(m => m.id === id).timer -= 1;
+  decrementTimer(state, meeting) {
+    meeting.timer -= 1;
   }
 };
-const actions = {
-  startTimer({ commit }, id) {
-    commit('startTimer', id);
-  },
-  decrementTimer({ commit, state }, id) {
-    commit('decrementTimer', id);
 
-    return state.meetings.find(m => m.id === id).timer;
+const actions = {
+  startTimer({ commit, getters }, id) {
+    commit('startTimer', getters.meeting(id));
   },
-  stopTimer({ commit }, id) {
-    commit('stopTimer', id);
+  decrementTimer({ commit, getters }, id) {
+    const meeting = getters.meeting(id);
+    commit('decrementTimer', meeting);
+
+    return meeting.timer;
+  },
+  stopTimer({ commit, getters }, id) {
+    commit('stopTimer', getters.meeting(id));
   }
 };
 
