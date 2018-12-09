@@ -79,29 +79,44 @@ const getters = {
 };
 
 const mutations = {
-  startTimer(state, meeting) {
+  startMeetingTimer(state, meeting) {
     meeting.timer = meeting.baseDuration;
   },
-  stopTimer(state, meeting) {
+  stopMeetingTimer(state, meeting) {
     meeting.timer = null;
   },
-  decrementTimer(state, meeting) {
+  decrementMeetingTimer(state, meeting) {
     meeting.timer -= 1;
+  },
+  updateMeeting(state, { id, name, baseDuration }) {
+    let meeting = state.meetings.find(m => m.id === id);
+
+    if (meeting) {
+      if (name) {
+        meeting.name = name;
+      }
+      if (baseDuration) {
+        meeting.baseDuration = baseDuration;
+      }
+    }
   }
 };
 
 const actions = {
-  startTimer({ commit, getters }, id) {
-    commit('startTimer', getters.meeting(id));
+  startMeetingTimer({ commit, getters }, id) {
+    commit('startMeetingTimer', getters.meeting(id));
   },
-  decrementTimer({ commit, getters }, id) {
+  decrementMeetingTimer({ commit, getters }, id) {
     const meeting = getters.meeting(id);
-    commit('decrementTimer', meeting);
+    commit('decrementMeetingTimer', meeting);
 
     return meeting.timer;
   },
-  stopTimer({ commit, getters }, id) {
-    commit('stopTimer', getters.meeting(id));
+  stopMeetingTimer({ commit, getters }, id) {
+    commit('stopMeetingTimer', getters.meeting(id));
+  },
+  updateMeeting({ commit }, data) {
+    commit('updateMeeting', data);
   }
 };
 

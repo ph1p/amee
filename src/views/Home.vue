@@ -36,7 +36,7 @@ export default {
     ...mapGetters(['meetings', 'sprintDays'])
   },
   methods: {
-    ...mapActions(['setSprint'])
+    ...mapActions(['setSprint', 'updateMeeting'])
   }
 };
 </script>

@@ -27,11 +27,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['startTimer']),
+    ...mapActions(['startMeetingTimer']),
     start() {
       const { id } = this.currentMeeting;
 
-      this.startTimer(id);
+      this.startMeetingTimer(id);
     }
   }
 };
