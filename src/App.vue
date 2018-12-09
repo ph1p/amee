@@ -7,6 +7,8 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
+const alarmSound = new Audio(require('@/assets/alarm-sound-1.mp3'));
+
 export default {
   data() {
     return {
@@ -20,11 +22,18 @@ export default {
   mounted() {
     this.unsubscribe = this.$store.subscribeAction(({ type, payload }) => {
       if (type === 'startTimer') {
+        // check if interval already exists
         if (this.intervalCache[payload]) {
           clearInterval(this.intervalCache[payload]);
         }
-        this.intervalCache[payload] = setInterval(() => {
-          this.decrementTimer(payload);
+        this.intervalCache[payload] = setInterval(async () => {
+          // check timer value
+          if ((await this.decrementTimer(payload)) <= 0) {
+            // stop
+            clearInterval(this.intervalCache[payload]);
+            this.stopTimer(payload);
+            alarmSound.play();
+          }
         }, 1000);
       }
     });
@@ -36,11 +45,11 @@ export default {
       }
     });
   },
-  methods: {
-    ...mapActions(['decrementTimer'])
-  },
   beforeDestroy() {
     this.unsubscribe();
+  },
+  methods: {
+    ...mapActions(['decrementTimer', 'stopTimer'])
   }
 };
 </script>
