@@ -8,15 +8,33 @@ Vue.config.productionTip = false;
 
 new Vue({
   provide: {
-    duration(seconds) {
-      const hours = seconds / 60 / 60;
-      const minutes = 60 / (1 / hours);
+    duration(_seconds) {
+      if (_seconds) {
+        const hours = (_seconds / (60 * 60)) % 24;
+        const minutes = (_seconds / 60) % 60;
+        const seconds = _seconds % 60;
 
-      if (minutes < 60) {
-        return `${minutes} ${Math.floor(minutes) === 1 ? 'minute' : 'minutes'}`;
+        const hourStr = `${Math.floor(hours)} ${hours > 1 ? 'hours' : 'hour'}`;
+        const minuteStr = `${Math.floor(minutes)} ${
+          minutes === 1 ? 'minute' : 'minutes'
+        }`;
+        const secondStr = `${Math.floor(seconds)} ${
+          seconds === 1 ? 'second' : 'seconds'
+        }`;
+
+        if (hours >= 1) {
+          return `${hourStr}`;
+        }
+
+        if (minutes < 60) {
+          return `${minuteStr} ${secondStr}`;
+        }
+
+        if (seconds < 60) {
+          return secondStr;
+        }
       }
-
-      return `${hours} ${Math.floor(hours) > 1 ? 'hours' : 'hour'}`;
+      return;
     }
   },
   router,

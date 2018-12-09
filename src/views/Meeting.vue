@@ -1,7 +1,8 @@
 <template>
   <div class="meeting">
     <h3>{{currentMeeting.name}}</h3>
-    <p>Duration: {{duration(currentMeeting.baseDuration)}} - {{currentMeeting.timer}}</p>
+    <p>Duration: {{duration(currentMeeting.baseDuration)}}</p>
+    <span>{{duration(currentMeeting.timer) || ''}}</span>
 
     <ul>
       <li v-for="step in currentMeeting.steps" :key="step.name">{{step.name}}</li>
