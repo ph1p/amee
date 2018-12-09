@@ -10,7 +10,7 @@
         v-for="(meeting, index) in meetings"
       >
         {{meeting.name}}
-        <p>{{duration(meeting.baseDuration)}}</p>
+        <p>{{duration(meeting.baseDuration)}} - {{meeting.timer}}</p>
       </router-link>
     </div>
   </div>
