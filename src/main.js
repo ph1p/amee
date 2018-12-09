@@ -10,29 +10,28 @@ new Vue({
   provide: {
     duration(_seconds) {
       if (_seconds) {
-        const hours = (_seconds / (60 * 60)) % 24;
-        const minutes = (_seconds / 60) % 60;
-        const seconds = _seconds % 60;
+        const hours = parseInt((_seconds / (60 * 60)) % 24);
+        const minutes = parseInt((_seconds / 60) % 60);
+        const seconds = parseInt(_seconds % 60);
 
-        const hourStr = `${Math.floor(hours)} ${hours > 1 ? 'hours' : 'hour'}`;
-        const minuteStr = `${Math.floor(minutes)} ${
-          minutes === 1 ? 'minute' : 'minutes'
-        }`;
-        const secondStr = `${Math.floor(seconds)} ${
-          seconds === 1 ? 'second' : 'seconds'
-        }`;
+        const hourStr = `${hours} ${hours > 1 ? 'hours' : 'hour'}`;
+        const minuteStr = ` ${minutes} ${minutes === 1 ? 'minute' : 'minutes'}`;
+        const secondStr = ` ${seconds} ${seconds === 1 ? 'second' : 'seconds'}`;
 
+        let timeStr = '';
         if (hours >= 1) {
-          return `${hourStr}`;
+          timeStr += hourStr;
         }
 
-        if (minutes < 60) {
-          return `${minuteStr} ${secondStr}`;
+        if (minutes < 60 && minutes > 0) {
+          timeStr += minuteStr;
         }
 
-        if (seconds < 60) {
-          return secondStr;
+        if (seconds < 60 && seconds > 0) {
+          timeStr += secondStr;
         }
+
+        return timeStr;
       }
       return;
     }
