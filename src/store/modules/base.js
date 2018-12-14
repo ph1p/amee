@@ -4,6 +4,7 @@ const state = {
       id: 1,
       name: 'Daily',
       baseDuration: 900,
+      timerStatus: 'stopped',
       timer: null,
       description: ``
     },
@@ -11,6 +12,7 @@ const state = {
       id: 2,
       name: 'Refinement',
       baseDuration: 3600,
+      timerStatus: 'stopped',
       timer: null,
       description: ``
     },
@@ -18,6 +20,7 @@ const state = {
       id: 3,
       name: 'Sprintplanning I',
       baseDuration: 3600,
+      timerStatus: 'stopped',
       timer: null,
       description: ``
     },
@@ -25,6 +28,7 @@ const state = {
       id: 4,
       name: 'Sprintplanning II',
       baseDuration: 3600,
+      timerStatus: 'stopped',
       timer: null,
       description: ``
     },
@@ -32,6 +36,7 @@ const state = {
       id: 5,
       name: 'Review',
       baseDuration: 3600,
+      timerStatus: 'stopped',
       timer: null,
       description: ``
     },
@@ -39,6 +44,7 @@ const state = {
       id: 6,
       name: 'Retrospective',
       baseDuration: 3600,
+      timerStatus: 'stopped',
       timer: null,
       description: ``,
       steps: [
@@ -82,6 +88,9 @@ const mutations = {
   startMeetingTimer(state, meeting) {
     meeting.timer = meeting.baseDuration;
   },
+  pauseMeetingTimer() {
+    // only for triggering
+  },
   stopMeetingTimer(state, meeting) {
     meeting.timer = null;
   },
@@ -117,6 +126,9 @@ const actions = {
   },
   updateMeeting({ commit }, data) {
     commit('updateMeeting', data);
+  },
+  pauseMeetingTimer({ commit }, id) {
+    commit('pauseMeetingTimer', id);
   }
 };
 

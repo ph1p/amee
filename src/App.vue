@@ -21,11 +21,13 @@ export default {
   },
   mounted() {
     this.unsubscribe = this.$store.subscribeAction(({ type, payload }) => {
-      if (type === 'startMeetingTimer') {
-        // check if interval already exists
+      if (type === 'pauseMeetingTimer') {
         if (this.intervalCache[payload]) {
           clearInterval(this.intervalCache[payload]);
         }
+      } else if (type === 'startMeetingTimer') {
+        // check if interval already exists
+
         this.intervalCache[payload] = setInterval(async () => {
           // check timer value
           if ((await this.decrementMeetingTimer(payload)) <= 0) {

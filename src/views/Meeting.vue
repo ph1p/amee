@@ -1,14 +1,21 @@
 <template>
   <div class="meeting">
-    <h3>{{currentMeeting.name}}</h3>
-    <p>Duration: {{duration(currentMeeting.baseDuration)}}</p>
-    <span>{{duration(currentMeeting.timer) || ''}}</span>
+    <div class="header">
+      <h3>{{currentMeeting.name}}</h3>
+      <p>Duration: {{duration(currentMeeting.baseDuration)}}</p>
+      <span v-if="isRunning">{{duration(currentMeeting.timer) || ''}}</span>
+    </div>
 
-    <ul>
+    <div class="description">{{currentMeeting.description}}</div>
+
+    <ul class="task">
       <li v-for="step in currentMeeting.steps" :key="step.name">{{step.name}}</li>
     </ul>
 
-    <button @click="start">Start Meeting</button>
+    <div class="footer">
+      {{isRunning}}
+      <button @click="isRunning ? pause() : start()">Start Meeting</button>
+    </div>
   </div>
 </template>
 
@@ -24,14 +31,31 @@ export default {
     },
     currentMeeting() {
       return this.meeting(this.id);
+    },
+    isRunning() {
+      return this.currentMeeting.timer > 0;
     }
   },
   methods: {
-    ...mapActions(['startMeetingTimer']),
+    ...mapActions([
+      'startMeetingTimer',
+      'stopMeetingTimer',
+      'pauseMeetingTimer'
+    ]),
     start() {
       const { id } = this.currentMeeting;
 
       this.startMeetingTimer(id);
+    },
+    stop() {
+      const { id } = this.currentMeeting;
+
+      this.stopMeetingTimer(id);
+    },
+    pause() {
+      const { id } = this.currentMeeting;
+
+      this.pauseMeetingTimer(id);
     }
   }
 };
@@ -39,6 +63,17 @@ export default {
 
 <style lang="scss" scoped>
 .meeting {
-  padding: 20px;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+  .header {
+    padding: 20px;
+  }
+  .footer {
+    padding: 20px;
+    button {
+      width: 100%;
+    }
+  }
 }
 </style>
