@@ -1,11 +1,12 @@
 import { TIMER_STATUS } from '@/constants';
 
 const state = {
+  sprintWeeks: 1,
   meetings: [
     {
       id: 1,
       name: 'Daily',
-      baseDuration: 900,
+      duration: 900,
       timerStatus: TIMER_STATUS.STOPPED,
       timer: null,
       description: ``
@@ -13,7 +14,7 @@ const state = {
     {
       id: 2,
       name: 'Refinement',
-      baseDuration: 3600,
+      duration: 3600,
       timerStatus: TIMER_STATUS.STOPPED,
       timer: null,
       description: ``
@@ -21,7 +22,13 @@ const state = {
     {
       id: 3,
       name: 'Sprintplanning I',
-      baseDuration: 3600,
+      duration: 3600,
+      sprintDuration: {
+        1: 7200,
+        2: 14400,
+        3: 21600,
+        4: 28800
+      },
       timerStatus: TIMER_STATUS.STOPPED,
       timer: null,
       description: ``
@@ -29,7 +36,13 @@ const state = {
     {
       id: 4,
       name: 'Sprintplanning II',
-      baseDuration: 3600,
+      duration: 3600,
+      sprintDuration: {
+        1: 7200,
+        2: 14400,
+        3: 21600,
+        4: 28800
+      },
       timerStatus: TIMER_STATUS.STOPPED,
       timer: null,
       description: ``
@@ -37,42 +50,54 @@ const state = {
     {
       id: 5,
       name: 'Review',
-      baseDuration: 3600,
+      duration: 3600,
       timerStatus: TIMER_STATUS.STOPPED,
       timer: null,
+      sprintDuration: {
+        1: 3600,
+        2: 7200,
+        3: 10800,
+        4: 14400
+      },
       description: ``
     },
     {
       id: 6,
       name: 'Retrospective',
-      baseDuration: 3600,
+      duration: 3600,
       timerStatus: TIMER_STATUS.STOPPED,
       timer: null,
       description: ``,
+      sprintDuration: {
+        1: 2700,
+        2: 5400,
+        3: 8100,
+        4: 10800
+      },
       steps: [
         {
           name: 'Set the Stage',
-          baseDuration: 3600,
+          duration: 3600,
           description: ``
         },
         {
           name: 'Gather data',
-          baseDuration: 3600,
+          duration: 3600,
           description: ``
         },
         {
           name: 'Generate insights',
-          baseDuration: 3600,
+          duration: 3600,
           description: ``
         },
         {
           name: 'Decide what to do',
-          baseDuration: 3600,
+          duration: 3600,
           description: ``
         },
         {
           name: 'Close the Retrospective',
-          baseDuration: 3600,
+          duration: 3600,
           description: ``
         }
       ]
@@ -81,23 +106,33 @@ const state = {
 };
 
 const getters = {
-  meetings: state => state.meetings,
+  sprintWeeks: state => state.sprintWeeks,
+  meetings: state =>
+    state.meetings.map(meeting => {
+      meeting.duration = !meeting.sprintDuration
+        ? meeting.duration
+        : meeting.sprintDuration[state.sprintWeeks];
+
+      return meeting;
+    }),
   meeting: (state, getters) => id =>
     getters.meetings.find(m => m.id === parseInt(id))
 };
 
 const mutations = {
+  setSprint(state, days) {
+    state.sprintWeeks = days;
+  },
   startMeetingTimer(state, meeting) {
     if (meeting.timerStatus !== TIMER_STATUS.STARTED) {
       if (meeting.timerStatus !== TIMER_STATUS.PAUSED) {
-        meeting.timer = meeting.baseDuration;
+        meeting.timer = meeting.duration;
       }
       meeting.timerStatus = TIMER_STATUS.STARTED;
     }
   },
   pauseMeetingTimer(state, meeting) {
     if (meeting.timerStatus !== TIMER_STATUS.PAUSED) {
-      // only for triggering
       meeting.timerStatus = TIMER_STATUS.PAUSED;
     }
   },
@@ -110,15 +145,15 @@ const mutations = {
   decrementMeetingTimer(state, meeting) {
     meeting.timer -= 1;
   },
-  updateMeeting(state, { id, name, baseDuration }) {
+  updateMeeting(state, { id, name, duration }) {
     let meeting = state.meetings.find(m => m.id === id);
 
     if (meeting) {
       if (name) {
         meeting.name = name;
       }
-      if (baseDuration) {
-        meeting.baseDuration = baseDuration;
+      if (duration) {
+        meeting.duration = duration;
       }
     }
   }
@@ -142,6 +177,9 @@ const actions = {
   },
   pauseMeetingTimer({ commit, getters }, id) {
     commit('pauseMeetingTimer', getters.meeting(id));
+  },
+  setSprint({ commit }, days) {
+    commit('setSprint', days);
   }
 };
 

@@ -34,7 +34,7 @@ new Vue({
           timeStr += secondStr;
         }
 
-        return timeStr;
+        return timeStr.trim();
       }
       return;
     }

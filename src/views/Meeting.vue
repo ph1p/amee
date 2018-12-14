@@ -1,14 +1,16 @@
 <template>
   <div class="meeting">
-    <AppHeader :title="currentMeeting.name" back/>
+    <AppHeader :title="`${currentMeeting.name} (${duration(currentMeeting.duration)})`" back/>
 
     <div class="content">
-      <p>Duration: {{duration(currentMeeting.baseDuration)}}</p>
-      <span>{{duration(currentMeeting.timer) || ''}}</span>
+      <div
+        class="countdown"
+        v-if="duration(currentMeeting.timer)"
+      >{{duration(currentMeeting.timer)}}</div>
 
       <div class="description">{{currentMeeting.description}}</div>
 
-      <ul class="task">
+      <ul class="steps" v-if="currentMeeting.steps">
         <li v-for="step in currentMeeting.steps" :key="step.name">{{step.name}}</li>
       </ul>
     </div>
@@ -71,11 +73,25 @@ export default {
   height: 100vh;
   display: grid;
   grid-template-rows: 50px 1fr auto;
-  .header {
-    padding: 0 20px;
-  }
   .content {
     padding: 20px;
+    .countdown {
+      padding: 25px;
+      text-align: center;
+      background-color: #efefef;
+      border-radius: 11px;
+      font-size: 24px;
+    }
+    .steps {
+      list-style: none;
+      padding: 0;
+      margin: 20px -20px 0;
+      border-top: 1px solid #efefef;
+      li {
+        padding: 15px 20px;
+        border-bottom: 1px solid #efefef;
+      }
+    }
   }
   .footer {
     padding: 20px;

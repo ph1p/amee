@@ -1,7 +1,12 @@
 <template>
   <div class="header">
     <div class="left">
-      <div class="back-button" v-if="back" @click="goBack">back</div>
+      <eva-icon
+        v-if="back"
+        @click="goBack"
+        name="arrow-ios-back-outline"
+        fill="white"
+      ></eva-icon>
     </div>
 
     <div class="title">{{title}}</div>
@@ -38,7 +43,8 @@ export default {
   align-items: center;
   color: #fff;
   background-color: rgb(0, 101, 126);
-  .back-button {
+  .left {
+    padding: 10px;
   }
   .title {
     text-align: center;

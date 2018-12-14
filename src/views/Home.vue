@@ -1,11 +1,11 @@
 <template>
   <div class="home">
-    <AppHeader :title="`Home (${sprintDays} days)`"/>
+    <AppHeader :title="`Home (${sprintWeeks} weeks)`"/>
     <select name="sprint" @change="setSprint($event.target.value * 1)">
-      <option value="5">1 week</option>
-      <option value="10">2 weeks</option>
-      <option value="15">3 weeks</option>
-      <option value="20">4 weeks</option>
+      <option value="1">1 week</option>
+      <option value="2">2 weeks</option>
+      <option value="3">3 weeks</option>
+      <option value="4">4 weeks</option>
     </select>
 
     <div class="meeting-list">
@@ -26,7 +26,7 @@
         ></eva-icon>
         <router-link tag="div" class="title" :to="`/meeting/${meeting.id}`">
           {{meeting.name}}
-          <p>{{duration(meeting.baseDuration)}}</p>
+          <p>{{meetingDuration(meeting)}}</p>
         </router-link>
         <div class="remaining-time" v-if="duration(meeting.timer)">{{duration(meeting.timer)}}</div>
       </div>
@@ -46,7 +46,7 @@ export default {
     AppHeader
   },
   computed: {
-    ...mapGetters(['meetings', 'sprintDays'])
+    ...mapGetters(['meetings', 'sprintWeeks'])
   },
   methods: {
     ...mapActions([
@@ -55,6 +55,13 @@ export default {
       'startMeetingTimer',
       'pauseMeetingTimer'
     ]),
+    meetingDuration(meeting) {
+      return this.duration(
+        !meeting.sprintDuration
+          ? meeting.duration
+          : meeting.sprintDuration[this.sprintWeeks]
+      );
+    },
     isRunning(meeting) {
       return meeting.timerStatus === TIMER_STATUS.STARTED;
     }
