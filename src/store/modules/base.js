@@ -1,10 +1,16 @@
+const TIMER_STATUS = {
+  STARTED: 'started',
+  STOPPED: 'stopped',
+  PAUSED: 'paused'
+};
+
 const state = {
   meetings: [
     {
       id: 1,
       name: 'Daily',
       baseDuration: 900,
-      timerStatus: 'stopped',
+      timerStatus: TIMER_STATUS.STOPPED,
       timer: null,
       description: ``
     },
@@ -12,7 +18,7 @@ const state = {
       id: 2,
       name: 'Refinement',
       baseDuration: 3600,
-      timerStatus: 'stopped',
+      timerStatus: TIMER_STATUS.STOPPED,
       timer: null,
       description: ``
     },
@@ -20,7 +26,7 @@ const state = {
       id: 3,
       name: 'Sprintplanning I',
       baseDuration: 3600,
-      timerStatus: 'stopped',
+      timerStatus: TIMER_STATUS.STOPPED,
       timer: null,
       description: ``
     },
@@ -28,7 +34,7 @@ const state = {
       id: 4,
       name: 'Sprintplanning II',
       baseDuration: 3600,
-      timerStatus: 'stopped',
+      timerStatus: TIMER_STATUS.STOPPED,
       timer: null,
       description: ``
     },
@@ -36,7 +42,7 @@ const state = {
       id: 5,
       name: 'Review',
       baseDuration: 3600,
-      timerStatus: 'stopped',
+      timerStatus: TIMER_STATUS.STOPPED,
       timer: null,
       description: ``
     },
@@ -44,7 +50,7 @@ const state = {
       id: 6,
       name: 'Retrospective',
       baseDuration: 3600,
-      timerStatus: 'stopped',
+      timerStatus: TIMER_STATUS.STOPPED,
       timer: null,
       description: ``,
       steps: [
@@ -86,13 +92,24 @@ const getters = {
 
 const mutations = {
   startMeetingTimer(state, meeting) {
-    meeting.timer = meeting.baseDuration;
+    if (meeting.timerStatus !== TIMER_STATUS.STARTED) {
+      if (meeting.timerStatus !== TIMER_STATUS.PAUSED) {
+        meeting.timer = meeting.baseDuration;
+      }
+      meeting.timerStatus = TIMER_STATUS.STARTED;
+    }
   },
-  pauseMeetingTimer() {
-    // only for triggering
+  pauseMeetingTimer(state, meeting) {
+    if (meeting.timerStatus !== TIMER_STATUS.PAUSED) {
+      // only for triggering
+      meeting.timerStatus = TIMER_STATUS.PAUSED;
+    }
   },
   stopMeetingTimer(state, meeting) {
-    meeting.timer = null;
+    if (meeting.timerStatus !== TIMER_STATUS.STOPPED) {
+      meeting.timer = null;
+      meeting.timerStatus = TIMER_STATUS.STOPPED;
+    }
   },
   decrementMeetingTimer(state, meeting) {
     meeting.timer -= 1;
@@ -127,8 +144,8 @@ const actions = {
   updateMeeting({ commit }, data) {
     commit('updateMeeting', data);
   },
-  pauseMeetingTimer({ commit }, id) {
-    commit('pauseMeetingTimer', id);
+  pauseMeetingTimer({ commit, getters }, id) {
+    commit('pauseMeetingTimer', getters.meeting(id));
   }
 };
 

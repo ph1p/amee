@@ -9,40 +9,51 @@ import { mapActions, mapGetters } from 'vuex';
 
 const alarmSound = new Audio(require('@/assets/alarm-sound-1.mp3'));
 
+const __intervalCache = {};
+
 export default {
   data() {
     return {
-      unsubscribe: null,
-      intervalCache: {}
+      unsubscribe: null
+      // intervalCache: {}
     };
   },
   computed: {
     ...mapGetters(['meetings'])
   },
   mounted() {
-    this.unsubscribe = this.$store.subscribeAction(({ type, payload }) => {
-      if (type === 'pauseMeetingTimer') {
-        if (this.intervalCache[payload]) {
-          clearInterval(this.intervalCache[payload]);
-        }
-      } else if (type === 'startMeetingTimer') {
-        // check if interval already exists
-
-        this.intervalCache[payload] = setInterval(async () => {
-          // check timer value
-          if ((await this.decrementMeetingTimer(payload)) <= 0) {
-            // stop
-            clearInterval(this.intervalCache[payload]);
-            this.stopMeetingTimer(payload);
-            alarmSound.play();
+    this.unsubscribe = this.$store.subscribeAction(
+      ({ type, payload }, state) => {
+        if (type === 'pauseMeetingTimer') {
+          if (__intervalCache[payload]) {
+            clearInterval(__intervalCache[payload]);
           }
-        }, 1000);
+        } else if (type === 'startMeetingTimer') {
+          // check if interval already exists
+
+          const meeting = state.base.meetings.find(m => m.id === payload);
+
+          const intervalMethod = async () => {
+            if ((await this.decrementMeetingTimer(payload)) <= 0) {
+              // stop
+              clearInterval(__intervalCache[payload]);
+              this.stopMeetingTimer(payload);
+              alarmSound.play();
+            }
+          };
+
+          __intervalCache[payload] = setInterval(intervalMethod, 1000);
+
+          if (meeting.timer) {
+            intervalMethod();
+          }
+        }
       }
-    });
+    );
 
     this.meetings.forEach(({ timer, id }) => {
-      if (timer > 0 && !this.intervalCache[id]) {
-        this.intervalCache[id] = setInterval(() => {
+      if (timer > 0 && !__intervalCache[id]) {
+        __intervalCache[id] = setInterval(() => {
           this.decrementMeetingTimer(id);
         }, 1000);
       }

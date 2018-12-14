@@ -1,10 +1,8 @@
 <template>
   <div class="meeting">
-    <div class="header">
-      <h3>{{currentMeeting.name}}</h3>
-      <p>Duration: {{duration(currentMeeting.baseDuration)}}</p>
-      <span v-if="isRunning">{{duration(currentMeeting.timer) || ''}}</span>
-    </div>
+    <AppHeader :title="currentMeeting.name" back/>
+    <p>Duration: {{duration(currentMeeting.baseDuration)}}</p>
+    <span>{{duration(currentMeeting.timer) || ''}}</span>
 
     <div class="description">{{currentMeeting.description}}</div>
 
@@ -14,16 +12,21 @@
 
     <div class="footer">
       {{isRunning}}
-      <button @click="isRunning ? pause() : start()">Start Meeting</button>
+      <button @click="start" v-if="!isRunning">Start Meeting</button>
+      <button @click="pause" v-else>Pause Meeting</button>
     </div>
   </div>
 </template>
 
 <script>
+import AppHeader from '@/components/app-header';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
   inject: ['duration'],
+  components: {
+    AppHeader
+  },
   computed: {
     ...mapGetters(['meeting']),
     id() {
@@ -33,7 +36,7 @@ export default {
       return this.meeting(this.id);
     },
     isRunning() {
-      return this.currentMeeting.timer > 0;
+      return this.currentMeeting.timerStatus === 'started';
     }
   },
   methods: {
@@ -65,9 +68,9 @@ export default {
 .meeting {
   height: 100vh;
   display: grid;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-rows: 50px 1fr 1fr;
   .header {
-    padding: 20px;
+    padding: 0 20px;
   }
   .footer {
     padding: 20px;
