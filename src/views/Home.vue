@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <AppHeader title="Home" />
+    <AppHeader :title="`Home (${sprintDays} days)`"/>
     <select name="sprint" @change="setSprint($event.target.value * 1)">
       <option value="5">1 week</option>
       <option value="10">2 weeks</option>
@@ -9,25 +9,34 @@
     </select>
 
     <div class="meeting-list">
-      <router-link
-        tag="div"
-        class="meeting"
-        :to="`/meeting/${meeting.id}`"
-        :key="meeting.name"
-        v-for="meeting in meetings"
-      >
-        <h4>
+      <div class="meeting" :key="meeting.name" v-for="meeting in meetings">
+        <eva-icon
+          v-if="isRunning(meeting)"
+          @click="pauseMeetingTimer(meeting.id)"
+          name="pause-circle-outline"
+          animation="pulse"
+          fill="#fda9a9"
+        ></eva-icon>
+        <eva-icon
+          v-else
+          name="play-circle-outline"
+          animation="pulse"
+          fill="limegreen"
+          @click="startMeetingTimer(meeting.id)"
+        ></eva-icon>
+        <router-link tag="div" class="title" :to="`/meeting/${meeting.id}`">
           {{meeting.name}}
           <p>{{duration(meeting.baseDuration)}}</p>
-        </h4>
+        </router-link>
         <div class="remaining-time" v-if="duration(meeting.timer)">{{duration(meeting.timer)}}</div>
-      </router-link>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import { TIMER_STATUS } from '@/constants';
 import AppHeader from '@/components/app-header';
 
 export default {
@@ -40,7 +49,15 @@ export default {
     ...mapGetters(['meetings', 'sprintDays'])
   },
   methods: {
-    ...mapActions(['setSprint', 'updateMeeting'])
+    ...mapActions([
+      'setSprint',
+      'updateMeeting',
+      'startMeetingTimer',
+      'pauseMeetingTimer'
+    ]),
+    isRunning(meeting) {
+      return meeting.timerStatus === TIMER_STATUS.STARTED;
+    }
   }
 };
 </script>
@@ -53,11 +70,11 @@ export default {
     border-top: 1px solid #ddd;
     .meeting {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 40px 1fr 1fr;
       align-items: center;
       padding: 20px;
       border-bottom: 1px solid #ddd;
-      h4 {
+      .title {
         font-weight: normal;
         margin: 0;
         p {

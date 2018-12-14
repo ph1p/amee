@@ -1,17 +1,19 @@
 <template>
   <div class="meeting">
     <AppHeader :title="currentMeeting.name" back/>
-    <p>Duration: {{duration(currentMeeting.baseDuration)}}</p>
-    <span>{{duration(currentMeeting.timer) || ''}}</span>
 
-    <div class="description">{{currentMeeting.description}}</div>
+    <div class="content">
+      <p>Duration: {{duration(currentMeeting.baseDuration)}}</p>
+      <span>{{duration(currentMeeting.timer) || ''}}</span>
 
-    <ul class="task">
-      <li v-for="step in currentMeeting.steps" :key="step.name">{{step.name}}</li>
-    </ul>
+      <div class="description">{{currentMeeting.description}}</div>
+
+      <ul class="task">
+        <li v-for="step in currentMeeting.steps" :key="step.name">{{step.name}}</li>
+      </ul>
+    </div>
 
     <div class="footer">
-      {{isRunning}}
       <button @click="start" v-if="!isRunning">Start Meeting</button>
       <button @click="pause" v-else>Pause Meeting</button>
     </div>
@@ -68,9 +70,12 @@ export default {
 .meeting {
   height: 100vh;
   display: grid;
-  grid-template-rows: 50px 1fr 1fr;
+  grid-template-rows: 50px 1fr auto;
   .header {
     padding: 0 20px;
+  }
+  .content {
+    padding: 20px;
   }
   .footer {
     padding: 20px;

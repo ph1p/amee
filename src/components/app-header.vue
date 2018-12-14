@@ -13,7 +13,6 @@
 
 <script>
 export default {
-  name: 'header',
   props: {
     back: {
       type: Boolean,

@@ -1,8 +1,4 @@
-const TIMER_STATUS = {
-  STARTED: 'started',
-  STOPPED: 'stopped',
-  PAUSED: 'paused'
-};
+import { TIMER_STATUS } from '@/constants';
 
 const state = {
   meetings: [

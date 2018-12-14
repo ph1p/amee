@@ -15,7 +15,6 @@ export default {
   data() {
     return {
       unsubscribe: null
-      // intervalCache: {}
     };
   },
   computed: {
@@ -29,8 +28,6 @@ export default {
             clearInterval(__intervalCache[payload]);
           }
         } else if (type === 'startMeetingTimer') {
-          // check if interval already exists
-
           const meeting = state.base.meetings.find(m => m.id === payload);
 
           const intervalMethod = async () => {
