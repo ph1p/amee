@@ -10,8 +10,11 @@
 
       <div class="description">{{currentMeeting.description}}</div>
 
-      <ul class="steps" v-if="currentMeeting.steps">
-        <li v-for="step in currentMeeting.steps" :key="step.name">{{step.name}}</li>
+      <ul class="steps" v-if="steps">
+        <li v-for="step in steps" :key="step.name" :class="{passed: step.passed}">
+          <div>{{step.name}}</div>
+          <p>{{duration(step.duration)}}</p>
+        </li>
       </ul>
     </div>
 
@@ -41,6 +44,17 @@ export default {
     },
     isRunning() {
       return this.currentMeeting.timerStatus === 'started';
+    },
+    steps() {
+      return this.currentMeeting.steps.map(step => {
+        return {
+          ...step,
+          passed:
+            this.currentMeeting.timer &&
+            this.currentMeeting.timer <=
+              this.currentMeeting.duration - step.realDuration
+        };
+      });
     }
   },
   methods: {
@@ -90,6 +104,17 @@ export default {
       li {
         padding: 15px 20px;
         border-bottom: 1px solid #efefef;
+        &.passed {
+          opacity: 0.5;
+          div {
+            text-decoration: line-through;
+          }
+        }
+        p {
+          font-size: 12px;
+          color: #999;
+          margin: 0;
+        }
       }
     }
   }

@@ -1,5 +1,6 @@
 export const TIMER_STATUS = {
   STARTED: 'started',
   STOPPED: 'stopped',
-  PAUSED: 'paused'
+  PAUSED: 'paused',
+  FINISHED: 'finished'
 };

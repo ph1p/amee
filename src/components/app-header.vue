@@ -1,15 +1,12 @@
 <template>
   <div class="header">
     <div class="left">
-      <eva-icon
-        v-if="back"
-        @click="goBack"
-        name="arrow-ios-back-outline"
-        fill="white"
-      ></eva-icon>
+      <eva-icon v-if="back" @click="goBack" name="arrow-ios-back-outline" fill="white"></eva-icon>
     </div>
 
-    <div class="title">{{title}}</div>
+    <div class="title">
+      <slot name="title"></slot>
+    </div>
 
     <div class="right"></div>
   </div>
@@ -22,10 +19,6 @@ export default {
     back: {
       type: Boolean,
       default: false
-    },
-    title: {
-      type: String,
-      default: ''
     }
   },
   methods: {

@@ -6,7 +6,7 @@ const state = {
     {
       id: 1,
       name: 'Daily',
-      duration: 900,
+      duration: 5,
       timerStatus: TIMER_STATUS.STOPPED,
       timer: null,
       description: ``
@@ -77,12 +77,12 @@ const state = {
       steps: [
         {
           name: 'Set the Stage',
-          duration: 3600,
+          duration: 10,
           description: ``
         },
         {
           name: 'Gather data',
-          duration: 3600,
+          duration: 5,
           description: ``
         },
         {
@@ -112,6 +112,19 @@ const getters = {
       meeting.duration = !meeting.sprintDuration
         ? meeting.duration
         : meeting.sprintDuration[state.sprintWeeks];
+
+      if (meeting.steps) {
+        meeting.steps = meeting.steps.reduce((b, c, i) => {
+          const newSteps = b.concat(c);
+
+          c.realDuration = c.duration;
+          if (newSteps[i - 1]) {
+            c.realDuration += newSteps[i - 1].duration;
+          }
+
+          return newSteps;
+        }, []);
+      }
 
       return meeting;
     }),
