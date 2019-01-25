@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="container home">
     <app-header>
       <div slot="title">
         <label for="sprint">
@@ -40,6 +40,10 @@
         </router-link>
         <div class="remaining-time" v-if="duration(meeting.timer)">{{duration(meeting.timer)}}</div>
       </div>
+    </div>
+
+    <div>
+      <router-link to="/planning-poker">Planning-Poker</router-link>
     </div>
   </div>
 </template>
@@ -82,7 +86,7 @@ export default {
 <style lang="scss" scoped>
 .home {
   display: grid;
-  grid-template-rows: 50px 1fr;
+  grid-template-rows: 50px 1fr 50px;
   label {
     position: relative;
     select {

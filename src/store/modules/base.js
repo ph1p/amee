@@ -76,29 +76,38 @@ const state = {
       },
       steps: [
         {
-          name: 'Set the Stage',
-          duration: 10,
-          description: ``
+          name: 'Einführung',
+          percentage: 0.1,
+          duration: -1,
+          description: `### Begrüße alle Anwesenden beim Retrospektiv-Meeting und gib die Spielregeln bekannt:
+
+* Seid positiv, bemüht euch um kontinuierliche Verbesserung und teilt alles mit, was dem Team helfen könnte.
+* Verzichtet auf persönliche Vorwürfe und nehmt eurerseits das Gesagte nicht persönlich.
+* Hört jedem Teammitglied aufmerksam zu und denkt daran, dass jede Meinung ihre Berechtigung hat (auch wenn ihr sie nicht teilt).
+* Lege fest, auf welchen Zeitraum sich die Diskussion beziehen soll: auf den letzten Sprint? Das letzte Quartal? Den gesamten Zeitraum seit dem Projektstart? Der zeitliche Rahmen muss klar definiert sein.
+* Ermutige dein Team, Verbesserungsvorschläge zu unterbreiten und nicht andere Teammitglieder anzuklagen.`
         },
         {
-          name: 'Gather data',
-          duration: 5,
-          description: ``
+          name: 'Was ist gut gelaufen?',
+          percentage: 0.4,
+          duration: -1,
+          description: `Geht die Übung von der positiven Seite an. Bitte die Teammitglieder, auf grüne Haftnotizzettel zu schreiben, was ihrer Meinung nach gut gelaufen ist (ein Vorschlag pro Zettel). Die Teilnehmer sollen die Zettel dann auf das Whiteboard kleben. Bitte den Übungsleiter, ähnliche oder gleiche Vorschläge zusammenzufassen.
+
+Diskutiert eure Vorschläge kurz im Team.`
         },
         {
-          name: 'Generate insights',
-          duration: 3600,
-          description: ``
+          name: 'Was muss verbessert werden?',
+          percentage: 0.4,
+          duration: -1,
+          description: `Geht wieder wie oben beschrieben vor, allerdings mit pinken oder roten Haftnotizzetteln. Erinnere dein Team daran, dass es um Handlungen und deren Ergebnisse geht und nicht um einzelne Personen.`
         },
         {
-          name: 'Decide what to do',
-          duration: 3600,
-          description: ``
-        },
-        {
-          name: 'Close the Retrospective',
-          duration: 3600,
-          description: ``
+          name: 'Nächste Schritte',
+          percentage: 0.1,
+          duration: -1,
+          description: `Nachdem ihr nun wisst, was weniger gut gelaufen ist: Mit welchen konkreten Maßnahmen kann das Team diese Punkte verbessern? Bitte die Teammitglieder, ihre Ideen dazu auf blaue Haftnotizzettel zu schreiben und auf das Whiteboard zu kleben. Die Zettel werden gruppiert und dann im Team besprochen. Vereinbart die umzusetzenden Maßnahmen, weist Zuständige zu und legt einen Termin für die Umsetzung fest.
+
+Danke allen für ihre Beiträge und ihre Ehrlichkeit. Lies kurz die Liste der Aufgaben für die Nachbereitung mit den Zuständigen und Fälligkeitsdaten vor.`
         }
       ]
     }
@@ -117,7 +126,9 @@ const getters = {
         meeting.steps = meeting.steps.reduce((b, c, i) => {
           const newSteps = b.concat(c);
 
+          c.duration = Math.round(c.percentage * meeting.duration);
           c.realDuration = c.duration;
+
           if (newSteps[i - 1]) {
             c.realDuration += newSteps[i - 1].duration;
           }

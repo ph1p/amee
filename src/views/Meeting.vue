@@ -1,6 +1,8 @@
 <template>
-  <div class="meeting">
-    <AppHeader :title="`${currentMeeting.name} (${duration(currentMeeting.duration)})`" back/>
+  <div class="container meeting">
+    <app-header back>
+      <div slot="title">{{currentMeeting.name}} ({{duration(currentMeeting.duration)}})</div>
+    </app-header>
 
     <div class="content">
       <div
@@ -11,9 +13,17 @@
       <div class="description">{{currentMeeting.description}}</div>
 
       <ul class="steps" v-if="steps">
-        <li v-for="step in steps" :key="step.name" :class="{passed: step.passed}">
+        <li
+          v-for="step in steps"
+          :key="step.name"
+          :class="{passed: step.passed}"
+          @click="expandStep(step)"
+        >
           <div>{{step.name}}</div>
           <p>{{duration(step.duration)}}</p>
+          <div class="description" v-if="expandedStep === step.name">
+            <vue-markdown>{{step.description}}</vue-markdown>
+          </div>
         </li>
       </ul>
     </div>
@@ -26,13 +36,20 @@
 </template>
 
 <script>
+import VueMarkdown from 'vue-markdown';
 import AppHeader from '@/components/app-header';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
   inject: ['duration'],
   components: {
-    AppHeader
+    AppHeader,
+    VueMarkdown
+  },
+  data() {
+    return {
+      expandedStep: -1
+    };
   },
   computed: {
     ...mapGetters(['meeting']),
@@ -46,15 +63,18 @@ export default {
       return this.currentMeeting.timerStatus === 'started';
     },
     steps() {
-      return this.currentMeeting.steps.map(step => {
-        return {
-          ...step,
-          passed:
-            this.currentMeeting.timer &&
-            this.currentMeeting.timer <=
-              this.currentMeeting.duration - step.realDuration
-        };
-      });
+      return (
+        this.currentMeeting.steps &&
+        this.currentMeeting.steps.map(step => {
+          return {
+            ...step,
+            passed:
+              this.currentMeeting.timer &&
+              this.currentMeeting.timer <=
+                this.currentMeeting.duration - step.realDuration
+          };
+        })
+      );
     }
   },
   methods: {
@@ -77,6 +97,9 @@ export default {
       const { id } = this.currentMeeting;
 
       this.pauseMeetingTimer(id);
+    },
+    expandStep({ name }) {
+      this.expandedStep = name !== this.expandedStep ? name : -1;
     }
   }
 };
