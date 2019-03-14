@@ -1,13 +1,14 @@
 import Vue from 'vue';
+import { VueHammer } from 'vue2-hammer';
 import EvaIcons from 'vue-eva-icons';
 import App from './App.vue';
 import router from './router';
 import store from './store';
 import './registerServiceWorker';
-
 Vue.config.productionTip = false;
 
 Vue.use(EvaIcons);
+Vue.use(VueHammer);
 
 new Vue({
   provide: {

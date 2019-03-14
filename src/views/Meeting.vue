@@ -1,28 +1,29 @@
 <template>
   <div class="container meeting">
     <app-header back>
-      <div slot="title">{{currentMeeting.name}} ({{duration(currentMeeting.duration)}})</div>
+      <div slot="title">
+        {{ currentMeeting.name }} ({{ duration(currentMeeting.duration) }})
+      </div>
     </app-header>
 
     <div class="content">
-      <div
-        class="countdown"
-        v-if="duration(currentMeeting.timer)"
-      >{{duration(currentMeeting.timer)}}</div>
+      <div class="countdown" v-if="duration(currentMeeting.timer)">
+        {{ duration(currentMeeting.timer) }}
+      </div>
 
-      <div class="description">{{currentMeeting.description}}</div>
+      <div class="description">{{ currentMeeting.description }}</div>
 
       <ul class="steps" v-if="steps">
         <li
           v-for="step in steps"
           :key="step.name"
-          :class="{passed: step.passed}"
+          :class="{ passed: step.passed }"
           @click="expandStep(step)"
         >
-          <div>{{step.name}}</div>
-          <p>{{duration(step.duration)}}</p>
+          <div>{{ step.name }}</div>
+          <p>{{ duration(step.duration) }}</p>
           <div class="description" v-if="expandedStep === step.name">
-            <vue-markdown>{{step.description}}</vue-markdown>
+            <vue-markdown>{{ step.description }}</vue-markdown>
           </div>
         </li>
       </ul>
@@ -31,6 +32,7 @@
     <div class="footer">
       <button @click="start" v-if="!isRunning">Start Meeting</button>
       <button @click="pause" v-else>Pause Meeting</button>
+      <button @click="stop">Stop Meeting</button>
     </div>
   </div>
 </template>

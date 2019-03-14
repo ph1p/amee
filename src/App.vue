@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -23,7 +23,7 @@ export default {
   mounted() {
     this.unsubscribe = this.$store.subscribeAction(
       ({ type, payload }, state) => {
-        if (type === 'pauseMeetingTimer') {
+        if (type === 'pauseMeetingTimer' || type === 'stopMeetingTimer') {
           if (__intervalCache[payload]) {
             clearInterval(__intervalCache[payload]);
           }

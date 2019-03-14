@@ -3,7 +3,7 @@
     <app-header>
       <div slot="title">
         <label for="sprint">
-          {{sprintWeeks}} weeks
+          {{ sprintWeeks }} weeks
           <select
             name="sprint"
             :value="sprintWeeks"
@@ -35,10 +35,12 @@
           @click="startMeetingTimer(meeting.id)"
         ></eva-icon>
         <router-link tag="div" class="title" :to="`/meeting/${meeting.id}`">
-          {{meeting.name}}
-          <p>{{meetingDuration(meeting)}}</p>
+          {{ meeting.name }}
+          <p>{{ meetingDuration(meeting) }}</p>
         </router-link>
-        <div class="remaining-time" v-if="duration(meeting.timer)">{{duration(meeting.timer)}}</div>
+        <div class="remaining-time" v-if="duration(meeting.timer)">
+          {{ duration(meeting.timer) }}
+        </div>
       </div>
     </div>
 
@@ -55,7 +57,7 @@ import AppHeader from '@/components/app-header';
 
 export default {
   inject: ['duration'],
-  name: 'home',
+  name: 'Home',
   components: {
     AppHeader
   },

@@ -1,7 +1,12 @@
 <template>
   <div class="header">
     <div class="left">
-      <eva-icon v-if="back" @click="goBack" name="arrow-ios-back-outline" fill="white"></eva-icon>
+      <eva-icon
+        v-if="back"
+        @click="goBack"
+        name="arrow-ios-back-outline"
+        fill="white"
+      ></eva-icon>
     </div>
 
     <div class="title">
@@ -11,7 +16,6 @@
     <div class="right"></div>
   </div>
 </template>
-
 
 <script>
 export default {
