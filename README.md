@@ -1,6 +1,6 @@
 # amee
 
-![https://amee.ph1p.now.sh](https://img.shields.io/badge/now-demo-black.svg)
+[![](https://img.shields.io/badge/now-demo-black.svg)](https://amee.ph1p.now.sh)
 
 ## Project setup
 ```
