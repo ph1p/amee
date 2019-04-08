@@ -1,6 +1,7 @@
 {
   "version": 2,
   "name": "amee",
+  "alias": ["amee.ph1p.now.sh"],
   "builds": [
     {
       "src": "package.json",
