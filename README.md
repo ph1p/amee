@@ -1,5 +1,7 @@
 # amee
 
+![https://amee.ph1p.now.sh](https://img.shields.io/badge/now-demo-black.svg)
+
 ## Project setup
 ```
 npm install
